@@ -49,26 +49,42 @@ public class P1 {
         reader.close();
     }
 
-    public Boolean isRobinHidden(Integer start, Set<Integer> visited, Integer lastValid) {
-        visited.add(start);
-        if (lords.contains(start)) return false;
+//    public Boolean isRobinHidden(Integer start, Set<Integer> visited, Integer lastValid) {
+//        visited.add(start);
+//        if (lords.contains(start)) return false;
+//
+//        Boolean res = true;
+//        for (Integer child : edges.get(start)) {
+//            if (!visited.contains(child) && (rang_of_node.get(child) > lastValid) && res) res = res & isRobinHidden(child, visited, lastValid);
+//        }
+//        return res;
+//    }
 
-        Boolean res = true;
-        for (Integer child : edges.get(start)) {
-            if (!visited.contains(child) && (rang_of_node.get(child) > lastValid) && res) res = res & isRobinHidden(child, visited, lastValid);
+    public Boolean isRobinHidden(Integer start, Integer lastValid) {
+        Set<Integer> visited = new HashSet<>();
+        Stack<Integer> stack = new Stack<>();
+        stack.push(start);
+
+        while (!stack.empty()) {
+            Integer start_node = stack.pop();
+            visited.add(start_node);
+            if (lords.contains(start_node)) return false;
+            for (Integer child : edges.get(start_node)) {
+                if (!visited.contains(child) && (rang_of_node.get(child) > lastValid)) stack.push(child);
+            }
         }
-        return res;
+        return true;
     }
 
     public Integer binarySearch(Integer last_failure, Integer last_solution) {
 
         if (last_solution - last_failure <= 1) {
-            if (isRobinHidden(1, new HashSet<>(), last_failure))  return last_failure;
+            if (isRobinHidden(1, last_failure))  return last_failure;
             else return last_solution;
         }
 
         Integer new_possible_last_solution = last_failure + ((last_solution - last_failure) / 2);
-        if (isRobinHidden(1, new HashSet<>(), new_possible_last_solution)) {
+        if (isRobinHidden(1, new_possible_last_solution)) {
             last_solution = new_possible_last_solution;
         }
         else {
