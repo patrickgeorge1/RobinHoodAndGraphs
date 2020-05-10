@@ -49,17 +49,6 @@ public class P1 {
         reader.close();
     }
 
-//    public Boolean isRobinHidden(Integer start, Set<Integer> visited, Integer lastValid) {
-//        visited.add(start);
-//        if (lords.contains(start)) return false;
-//
-//        Boolean res = true;
-//        for (Integer child : edges.get(start)) {
-//            if (!visited.contains(child) && (rang_of_node.get(child) > lastValid) && res) res = res & isRobinHidden(child, visited, lastValid);
-//        }
-//        return res;
-//    }
-
     public Boolean isRobinHidden(Integer start, Integer lastValid) {
         Set<Integer> visited = new HashSet<>();
         Stack<Integer> stack = new Stack<>();
