@@ -100,21 +100,34 @@ public class P3 {
         });
 
         heap.add(vertices.get(1));
-
         while (!heap.isEmpty()) {
+            // trag
             Vertex node = heap.remove();
-            if (node.id == n) break;
-            visited.add(node.id);
-            for (Edge child : edges.get(node.id)) {
-                Integer child_id = child.child;
-                if (!visited.contains(child_id)) {
-                    Double energyLeft = node.energyLeft;
-                    Integer child_procent = child.procent;
-                    Vertex child_object = new Vertex(child_id, energyLeft * (1 - (child_procent / 100.0)), node.id);
-                    vertices.put(child_id, child_object);
-                    heap.add(child_object);
+            // verific sa nu fi fost rez inainte
+            if (!visited.contains(node.id)) {
+                // prima data cand sunt rez ==> sunt veriunea oficeala
+                vertices.put(node.id, node);
+                visited.add(node.id);
+
+                // poate sunt nodul cautat
+                if (node.id == n) break;
+
+                // propun versiuni pt toti copii mei
+                for (Edge child : edges.get(node.id)) {
+                    Integer child_id = child.child;
+
+                    // propun doar pt cei neelucidati
+                    if (!visited.contains(child_id)) {
+                        Double energyLeft = node.energyLeft;
+                        Integer child_procent = child.procent;
+                        Vertex child_object = new Vertex(child_id, energyLeft * (1 - (child_procent / 100.0)), node.id);
+                        heap.add(child_object);
+                    }
                 }
+
+
             }
+
         }
 
 
@@ -134,8 +147,7 @@ public class P3 {
         }
 
         FileWriter myWriter = new FileWriter("p3.out");
-
-        System.out.println(vertices.get(n).energyLeft);
+//        System.out.println(vertices.get(n).energyLeft);
         myWriter.write(Double.valueOf(vertices.get(n).energyLeft).toString());
         myWriter.write("\n");
         myWriter.write(res.toString());
