@@ -2,8 +2,6 @@ package src;
 
 import java.io.*;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 public class P2 {
     public Integer n = 0;
