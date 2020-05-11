@@ -1,1 +1,52 @@
-Readme
+--------------------------- PROBLEM I --------------------------------------------
+
+        I performed a customised binary search on permutation array :
+
+1.) assigned the position from permutation to each node
+2.) designed function isRobinHoodHidden( dfs on nodes with postion in permutation
+    greater than pivot index, with a early stop in case we visit a lord)
+3.) in each iteration we know last failure index and last success index
+4.) we place pivot between 0 and (last failure + (1/2) * last (success - failure))
+5.) if Robbin is still hidden, last success = pivot
+6.) if Robbin is visible, last failure = pivot
+7.) reapat till last succes and last failure meed each other
+
+//             O( E * log (V) )
+
+
+
+--------------------------- PROBLEM II -------------------------------------------
+
+       Bellman-Ford optimised to work with strucure edge{parent, child, cost}
+
+1.) optimise for maximum of V - 1 times
+2.) realax distance to each node if possible
+3.) early stop if we are unable to optimise
+
+Works faster due to Programming Language Java "foreach iteration" on
+ArrayList<Edge>, rather than Map<Integer, <ArrayList<Node>>
+
+//             O( V * E )
+
+
+--------------------------- PROBLEM III ------------------------------------------
+
+        Dijkstra with Priority Queue (PQ) customised to work for fractions
+
+1.) each node must know his parent from Dijstra traversal
+2.) each node must know his energy saved (total - consumed) to reach it
+3.) pop a node from PQ ===> best alternative, we should mark him as true
+4.) foreach unmarked children, compute their energy, set their parent as
+    this node, add them to PQ ===> future possible solution
+5.) early stop condition if we pop last node
+6.) repeat untill heap is empty
+7.) from the last node, take parent until first node and add them to a stack
+    to pop solution in reverse order
+8.) pop solution
+
+I also considered to use logarithm on (1 - percent_of_edge) and run a regular
+Dijkstra algorithm, but find out that is unnecessary due to this current
+approach .
+
+//             O( (V + E) * log (V) )
+
