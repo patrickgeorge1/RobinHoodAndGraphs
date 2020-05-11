@@ -24,6 +24,7 @@ public class P2 {
         }
     }
 
+    // read data
     public void readOptimised() throws IOException {
         BufferedReader reader = new BufferedReader(new FileReader("p2.in"));
 
@@ -47,6 +48,7 @@ public class P2 {
         }
     }
 
+    // customised bellman ford for data strucure edge = {parent, child, cost}
     public void solveOptimised() throws IOException {
         Boolean neverOptimized;
         readOptimised();
@@ -66,6 +68,7 @@ public class P2 {
                     neverOptimized = false;
                 }
             }
+            // early stop condition
             if (neverOptimized) {
                 break;
             }

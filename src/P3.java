@@ -14,7 +14,7 @@ public class P3 {
     public Set<Integer> visited = new HashSet<>();
     public Double infinity = Double.MAX_VALUE;
 
-
+    // each vertex should remember his parent and the most possible energy left
     class Vertex {
         Integer id = -1;
         Integer parent = -1;
@@ -63,6 +63,7 @@ public class P3 {
         }
     }
 
+    // read input
     public void read() throws IOException {
         BufferedReader reader = new BufferedReader(new FileReader("p3.in"));
         String[] first_line = reader.readLine().split(" ");
@@ -88,8 +89,11 @@ public class P3 {
         vertices.put(1, new Vertex(1, energy));
     }
 
+    // Dijkstra with Priority Queue, with early stop condition
     public void solve() throws IOException {
         read();
+
+        // pop the node with most energy
         PriorityQueue<Vertex> heap = new PriorityQueue<>(new Comparator<Vertex>() {
             @Override
             public int compare(Vertex o1, Vertex o2) {
@@ -99,46 +103,49 @@ public class P3 {
             }
         });
 
+
         heap.add(vertices.get(1));
         while (!heap.isEmpty()) {
-            // trag
+            // extract
             Vertex node = heap.remove();
-            // verific sa nu fi fost rez inainte
+            // check to be unsolved
             if (!visited.contains(node.id)) {
-                // prima data cand sunt rez ==> sunt veriunea oficeala
+                // first time processing it, so his left energy has a true value
                 vertices.put(node.id, node);
+                // mark his values
                 visited.add(node.id);
 
-                // poate sunt nodul cautat
+                // maybe we arrive at target node, so we can stop
                 if (node.id == n) break;
 
                 // propun versiuni pt toti copii mei
                 for (Edge child : edges.get(node.id)) {
                     Integer child_id = child.child;
 
-                    // propun doar pt cei neelucidati
+                    // each blurry(value is unmarked)  child
                     if (!visited.contains(child_id)) {
                         Double energyLeft = node.energyLeft;
                         Integer child_procent = child.procent;
+                        // set parent
                         Vertex child_object = new Vertex(child_id, energyLeft * (1 - (child_procent / 100.0)), node.id);
                         heap.add(child_object);
                     }
                 }
-
-
             }
-
         }
 
-
+        // build soltion with stack because we want to backtrace brom target to source
         Stack<Integer> solution = new Stack<>();
         Vertex backtracer = vertices.get(n);
+        // add and move to parent until we find source
         while (backtracer.id != 1) {
             solution.add(backtracer.id);
             backtracer = vertices.get(backtracer.parent);
         }
+        // add source
         solution.add(1);
 
+        // build string from stack the stack of parents
         StringBuilder res = new StringBuilder();
         res.append(solution.pop());
         while (!solution.empty()) {
@@ -147,7 +154,6 @@ public class P3 {
         }
 
         FileWriter myWriter = new FileWriter("p3.out");
-//        System.out.println(vertices.get(n).energyLeft);
         myWriter.write(Double.valueOf(vertices.get(n).energyLeft).toString());
         myWriter.write("\n");
         myWriter.write(res.toString());

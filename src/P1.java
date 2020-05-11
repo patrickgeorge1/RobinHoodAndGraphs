@@ -12,6 +12,7 @@ public class P1 {
     public Map<Integer, ArrayList<Integer>> edges = new HashMap<>();
     public Map<Integer, Integer> rang_of_node = new HashMap<>();
 
+    // Read input
     public void read() throws IOException, IOException {
         BufferedReader reader = new BufferedReader(new FileReader("p1.in"));
 
@@ -49,6 +50,7 @@ public class P1 {
         reader.close();
     }
 
+    // Iterative dfs to check if we visit a lord from Robin location
     public Boolean isRobinHidden(Integer start, Integer lastValid) {
         Set<Integer> visited = new HashSet<>();
         Stack<Integer> stack = new Stack<>();
@@ -65,18 +67,22 @@ public class P1 {
         return true;
     }
 
+    // recursive binary search
     public Integer binarySearch(Integer last_failure, Integer last_solution) {
 
+        // stop condition
         if (last_solution - last_failure <= 1) {
+            // check if last_failure shades a success case
             if (isRobinHidden(1, last_failure))  return last_failure;
             else return last_solution;
         }
 
+        // pivot
         Integer new_possible_last_solution = last_failure + ((last_solution - last_failure) / 2);
+        // we can t protect Robin with many cities, so we try to reduce their number
         if (isRobinHidden(1, new_possible_last_solution)) {
             last_solution = new_possible_last_solution;
-        }
-        else {
+        } else {
             last_failure = new_possible_last_solution;
         }
 
